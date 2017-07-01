@@ -1,5 +1,7 @@
 package com.puzhen.dijkstra;
 
+import java.io.IOException;
+
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
@@ -12,12 +14,22 @@ public class TestCreateMapFromFile extends TestCase {
 	}
 	
 	/**
-	 * Test map creation
+	 * Test map creation, not null
 	 */
-	public void test0() {
+	public void test0() throws IOException {
 		Dijkstra dij = new Dijkstra();
 		SimpleWeightedGraph<String, DefaultWeightedEdge> graph
 			= dij.createMapFromFile("testcases/case0");
 		assertTrue(graph != null);
+	}
+	
+	/**
+	 * Test vertices size
+	 */
+	public void test1() throws IOException {
+		Dijkstra dij = new Dijkstra();
+		SimpleWeightedGraph<String, DefaultWeightedEdge> graph
+			= dij.createMapFromFile("testcases/case0");
+		assertEquals(8, graph.vertexSet().size());
 	}
 }
