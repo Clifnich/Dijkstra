@@ -17,7 +17,7 @@ public class TestCreateMapFromFile extends TestCase {
 	public void test0() {
 		Dijkstra dij = new Dijkstra();
 		SimpleWeightedGraph<String, DefaultWeightedEdge> graph
-			= dij.createMapFromFile("");
+			= dij.createMapFromFile("testcases/case0");
 		assertTrue(graph != null);
 	}
 }
