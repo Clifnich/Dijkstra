@@ -33,7 +33,7 @@ public class Dijkstra {
 		// #1 add the weighted edges
 		String line = "";
 		while ((line = rd.readLine()) != null) {
-			String[] elements = line.split("\t");
+			String[] elements = line.contains("\t") ? line.split("\t") : line.split(" ");
 			String root_vex = elements[0];
 			// skip the first element which is the vertex itself
 			for (int i = 1; i< elements.length; i++) {
@@ -62,26 +62,53 @@ public class Dijkstra {
 		int vertexSetSize = graph.vertexSet().size();
 		for (String vex : graph.vertexSet()) {
 			if (!vex.equals(start_vex)) {
-				map.put(vex, new Integer(1000000));
+				map.put(vex, new Integer(9999999));
 			}
 		}
 		while (x.size() != vertexSetSize) {
+			int greedyScore = 99999999;
+			String wStar = null;
 			// grow x by one node
-			// TODO solve the ConcurrentModificationException here.
-			for (String vex : x) {
-				List<String> neighbors = Graphs.neighborListOf(graph, vex);
-				for (String neighbor : neighbors) {
-					// vex in X, neighbor not in X
-					if (!x.contains(neighbor)) {
-						int pathLength =  map.get(vex).intValue()
-								+ (int)(graph.getEdgeWeight(graph.getEdge(vex, neighbor)));
+			for (String v : x) {
+				List<String> neighbors = Graphs.neighborListOf(graph, v);
+				for (String w : neighbors) {
+					// v in X, w not in X
+					if (!x.contains(w)) {
+						int pathLength =  map.get(v).intValue()
+								+ (int)(graph.getEdgeWeight(graph.getEdge(v, w)));
+						if (pathLength < greedyScore) {
+							greedyScore = pathLength;
+							wStar = w;
+						}
+						/*
 						if (pathLength < map.get(neighbor))
 							map.replace(neighbor, new Integer(pathLength));
-						x.add(neighbor);
+						if (!newTerritory.contains(neighbor))
+							newTerritory.add(neighbor);*/
+						
 					}
 				}
 			}
+			x.add(wStar);
+			map.replace(wStar, greedyScore);
 		}
 		return map;
+	}
+	
+	public static void main(String[] args) throws IOException {
+		Dijkstra dij = new Dijkstra();
+		SimpleWeightedGraph<String, DefaultWeightedEdge> graph
+			= dij.createMapFromFile("assignment.txt");
+		Map<String, Integer> map = dij.getShortestPath("1", graph);
+		System.out.println(map.get("7")
+				+ "," + map.get("37")
+				+ "," + map.get("59")
+				+ "," + map.get("82")
+				+ "," + map.get("99")
+				+ "," + map.get("115")
+				+ "," + map.get("133")
+				+ "," + map.get("165")
+				+ "," + map.get("188")
+				+ "," + map.get("197"));
 	}
 }
